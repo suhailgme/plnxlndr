@@ -1,2 +1,2 @@
 # plnxlndr
-A lending bot for the Poloniex market/platform.
+A cryptocurrency lending bot for the Poloniex market/platform.
