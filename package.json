@@ -1,0 +1,30 @@
+{
+  "name": "poloniexlendingbot",
+  "version": "1.0.0",
+  "description": "A lending bot for the poloniex cryptocurrency exchange",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhailgme/plnxlndr.git"
+  },
+  "keywords": [
+    "crypto",
+    "bot",
+    "cryptocurrency",
+    "lending",
+    "poloniex"
+  ],
+  "author": "suhailgme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suhailgme/plnxlndr/issues"
+  },
+  "homepage": "https://github.com/suhailgme/plnxlndr#readme",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "poloniex-api-node": "^1.3.0"
+  }
+}
