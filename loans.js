@@ -19,7 +19,7 @@ const getDepth = coin => {
 const getLendingHistory = () => {
   return poloniex.returnLendingHistory(1483228800, 1514764799, null)
     .then(history => history)
-    .catch(err => history)
+    .catch(err => err)
 }
 
 
