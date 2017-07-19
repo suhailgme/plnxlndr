@@ -80,13 +80,21 @@ const getLendingEarnings = (coin) => {
     }).catch(err => console.error(err))
 }
 
-// const openLoanOffers = () => {
-//     loans.getOpenLoanOffers().then(openOffers => console.log(openOffers))
-// }
+const getOpenLoanOffers = (coin) => {
+    loans.getOpenLoanOffers().then((openOffers) =>{
+        if (openOffers.length){
+            console.log(openOffers)
+        }else{
+            console.log('No open offers.')
+        }
+    })
+}
 
 
 const main = () => {
-    getMarketRate(coin, requiredDepth).then(rate =>loanMarketData.rate.push(rate))
+    getMarketRate(coin, requiredDepth)
+    .then(rate =>loanMarketData.rate.push(rate))
+    .catch(err => console.log(err))
     console.log(loanMarketData)
     loanMarketData.average = (loanMarketData.rate.length >= 1 ? _.mean(loanMarketData.rate) : console.log('Getting additional lending rates...'))
     setTimeout(main, 10000)
@@ -94,12 +102,12 @@ const main = () => {
 
 }
 
-// getMarketRate(coin, requiredDepth)
+getMarketRate(coin, requiredDepth)
 // setInterval(getMarketRate, 10000, coin, requiredDepth)
-// getLendingEarnings(coin)
-// activeLoans(coin)
-main()
-
+getLendingEarnings(coin)
+activeLoans(coin)
+//main()
+//getOpenLoanOffers(coin)
 
 //getMarketDepth(coin)
 //getCompleteBalances()
