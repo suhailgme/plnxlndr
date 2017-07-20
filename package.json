@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/suhailgme/plnxlndr#readme",
   "dependencies": {
+    "jsonfile": "^3.0.1",
     "lodash": "^4.17.4",
     "poloniex-api-node": "^1.3.0"
   }
