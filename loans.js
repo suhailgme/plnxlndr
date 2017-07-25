@@ -8,8 +8,8 @@ let poloniex = new Poloniex(apiKey, secret);
 
 /*------------------------------------------------*/
 
-const getDepth = coin => {
-  return poloniex.returnLoanOrders(coin, null)
+const getDepth = currency => {
+  return poloniex.returnLoanOrders(currency, ordersToFetch)
     .then(loanOrders => loanOrders)
     .catch(err => err)
 }
@@ -23,10 +23,16 @@ const getLendingHistory = () => {
 }
 
 
-const getBalances = () => {
-  return poloniex.returnBalances()
+const getAllBalances = () => {
+  return poloniex.returnCompleteBalances('all')
     .then(balances => balances)
     .catch(err => err)
+}
+
+const getAvailableBalances = () => {
+  return poloniex.returnAvailableAccountBalances()
+  .then(availableBalances => availableBalances)
+  .catch(err => err)
 }
 
 
@@ -39,7 +45,7 @@ const getActiveLoans = () => {
 }
 
 
-const getOpenLoanOffers = coin => {
+const getOpenLoanOffers = () => {
   return poloniex.returnOpenLoanOffers()
     .then(loanOffers => loanOffers)
     .catch(err => err)
@@ -48,7 +54,8 @@ const getOpenLoanOffers = coin => {
 module.exports = {
   getActiveLoans,
   getDepth,
-  getBalances,
+  getAllBalances,
   getLendingHistory,
-  getOpenLoanOffers
+  getOpenLoanOffers,
+  getAvailableBalances
 }
