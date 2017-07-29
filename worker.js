@@ -23,9 +23,9 @@ const getMarketRate = (currency, requiredDepth) => {
                 }
             })
             //console.log(`Required Market Depth is: ${requiredDepth}`)
-            console.log(`Market depth is ${depth} ${currency}. Total offers parsed: ${totalCount}. Offers until required depth: ${ordersUntilRequiredDepth} Rate is: ${rate}%`);
-            depth ? resolve(rate) : reject('Couldn\'t reach Poloniex. Check arguments.')
-        }).catch(err => console.error(err.message))
+            console.log(`\n${Date().slice(16,24)}: Market depth is ${depth} ${currency}. Total offers parsed: ${totalCount}. Offers until required depth: ${ordersUntilRequiredDepth} Rate is: ${rate}%`);
+            depth ? resolve(rate) : reject(`${Date().slice(16,24)}: Couldn\'t reach Poloniex. Check arguments.`)
+        }).catch(err => console.error(`${Date().slice(16,24)}: ${err.message}`))
     })
 
 }
@@ -38,19 +38,26 @@ const getActiveLoans = (currency) => {
         .then((activeLoans) => {
             //console.log(activeLoans)
             if (activeLoans.provided.length === 0) {
-                console.log('No active loans')
+                console.log(`${Date().slice(16,24)}: No active loans`)
             } else {
                 activeLoans.provided.forEach((loan) => {
-                    console.log(`Loan of ${loan.amount}${currency} at rate of ${(loan.rate*100).toFixed(4)}% for ${loan.duration} days accepted on ${loan.date} (auto renew is ${loan.autoRenew === 0 ? 'off).' : 'on).'}`)
+                    console.log(`${Date().slice(16,24)}: Active loan of ${loan.amount}${currency} at rate of ${(loan.rate*100).toFixed(4)}% for ${loan.duration} days accepted on ${loan.date} (auto renew is ${loan.autoRenew === 0 ? 'off).' : 'on).'}`)
                 })
             }
-        }).catch(err => console.error(err.message))
+        }).catch(err => console.error(`${Date().slice(16,24)}: ${err.message}`))
 }
 
 // Prints complete account balance for all accounts (exchange, margin, lending) to console.
 const getCompleteBalances = () => {
     loans.getAllBalances()
-        .then(balances => console.log(balances['BTC']))
+        .then(balances => console.log(`${Date().slice(16,24)}: Account balance: ${JSON.stringify(balances['BTC'])}`))
+        .catch(err => console.error(err))
+    loans.getAvailableBalances()
+    .then((availableBalances) =>{
+        console.log(`${Date().slice(16,24)}: Available balances ${JSON.stringify(availableBalances)}`)
+    })
+
+        //.then(availableBalances => console.log(`${Date().slice(16,24)}: available balances  ${availableBalances}`))
         .catch(err => console.error(err))
 }
 
@@ -58,19 +65,25 @@ const getCompleteBalances = () => {
 // to console.
 const getLendingEarnings = (currency) => {
     loans.getLendingHistory().then((history) => {
+        //console.log('History start ',history,'History End')
         if (history.length === 0) {
-            console.log("No lending history available.")
+            console.log(`${Date().slice(16,24)}: No lending history available.`)
         } else {
-            let gross = 0,
-                net = 0,
-                fees = 0
-            history.forEach((loan) => {
-                if (loan.currency === currency) {
-                    gross += parseFloat(loan.earned)
-                    fees += parseFloat(loan.fee)
-                }
-            })
-            console.log(`Gross earnings: ${gross} ${currency}\nFees: ${fees} ${currency}\nNet earnings: ${gross+fees} ${currency}`)
+            try {
+                let gross = 0,
+                    fees = 0
+                history.forEach((loan) => {
+                    if (loan.currency === currency) {
+                        gross += parseFloat(loan.earned)
+                        fees += parseFloat(loan.fee)
+                    }
+                })
+                console.log(`${Date().slice(16,24)}: Gross earnings: ${gross} ${currency}\n\t  Fees: ${fees} ${currency}\n\t  Net earnings: ${gross+fees} ${currency}`)
+
+            } catch (err) {
+                console.log(`${Date().slice(16,24)}: Error getting lending history while calculating earnings!`)
+            }
+
         }
     }).catch(err => console.error(err))
 }
@@ -80,7 +93,7 @@ const getOpenLoanOffers = (currency) => {
         if (openOffers.length) {
             console.log(openOffers)
         } else {
-            console.log('No open offers.')
+            console.log(`${Date().slice(16,24)}: No open offers.`)
         }
     })
 }
