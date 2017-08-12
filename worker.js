@@ -47,7 +47,7 @@ const getActiveLoans = (currency) => {
           //console.log(`${Date().slice(16,24)}: No active loans`)
         } else {
           activeLoans.provided.forEach((loan) => {
-            console.log(`${Date().slice(16,24)}: Active loan of ${loan.amount}${currency} at rate of ${(loan.rate*100).toFixed(4)}% for ${loan.duration} days accepted on ${loan.date} (auto renew is ${loan.autoRenew === 0 ? 'off).' : 'on).'}`)
+            console.log(`${Date().slice(16,24)}: Active loan of ${loan.amount} ${currency} at rate of ${(loan.rate*100).toFixed(4)}% for ${loan.duration} days accepted on ${loan.date} (auto renew is ${loan.autoRenew === 0 ? 'off).' : 'on).'}`)
           })
           resolve(activeLoans.provided)
         }
@@ -57,62 +57,86 @@ const getActiveLoans = (currency) => {
 }
 
 // Prints complete account balance for all accounts (exchange, margin, lending) to console.
+// Returns a promise containing an object with ALL balances of currency parameter in the account.
 const getCompleteBalances = currency => {
-  let balances = {}
-  loans.getAllBalances()
-    .then((allBalances) => {
-      balances.allBalances = allBalances[currency]
-      loans.getAvailableBalances()
-        .then((availableBalances) => {
-          balances.availableBalances = availableBalances
+  return new Promise((resolve, reject) => {
+    let balances = {}
+    loans.getAllBalances()
+      .then((allBalances) => {
+        balances.allBalances = allBalances[currency]
+        loans.getAvailableBalances()
+          .then((availableBalances) => {
+            balances.availableBalances = availableBalances
+            if (Object.keys(balances).length) {
+              console.log(`${Date().slice(16,24)}: Lending balance: ${balances.availableBalances.lending[currency]} BTC \n\t  On orders: ${balances.allBalances.onOrders} BTC \n\t  Account value: ${balances.allBalances.btcValue} BTC`)
 
-          console.log(`${Date().slice(16,24)}:`, JSON.stringify(balances, null, 1))
-        })
-    }).catch(err => console.error(err))
+              resolve(balances)
+            } else {
+              reject('Unable to retrieve balances or not balances available.')
+            }
+          })
+      }).catch(err => console.error(`${Date().slice(16,24)}: ${err.message}`))
+  })
+
 }
 
 // Takes the currency to get earnings for as an argument. Prints the Gross earnings, fees and net earnings (gross - fees)
-// to console.
+// to console. Returns a promise (an empty object if rejected) containing gross earnings, fees, and net earnings.
 const getLendingEarnings = (currency) => {
-  loans.getLendingHistory().then((history) => {
-    //console.log('History start ',history,'History End')
-    if (history.length === 0) {
-      console.log(`${Date().slice(16,24)}: No lending history available.`)
-    } else {
-      try {
-        let gross = 0,
-          fees = 0
-        history.forEach((loan) => {
-          if (loan.currency === currency) {
-            gross += parseFloat(loan.earned)
-            fees += parseFloat(loan.fee)
-          }
-        })
-        console.log(`${Date().slice(16,24)}: Gross earnings: ${gross} ${currency}\n\t  Fees: ${fees} ${currency}\n\t  Net earnings: ${gross+fees} ${currency}`)
+  return new Promise((resolve, reject) => {
+    let earnings = {}
+    loans.getLendingHistory().then((history) => {
+      if (history.length === 0) {
+        console.log(`${Date().slice(16,24)}: No lending history available.`)
+        reject(earnings)
+      } else {
+        try {
+          let gross = 0,
+            fees = 0
+          history.forEach((loan) => {
+            if (loan.currency === currency) {
+              gross += parseFloat(loan.earned)
+              fees += parseFloat(loan.fee)
+            }
+          })
+          console.log(`${Date().slice(16,24)}: Gross earnings: ${gross} ${currency}\n\t  Fees: ${fees} ${currency}\n\t  Net earnings: ${gross+fees} ${currency}`)
+          earnings.gross = gross, earnings.fees = fees, earnings.net = gross + fees
+          resolve(earnings)
 
-      } catch (err) {
-        console.log(`${Date().slice(16,24)}: Error getting lending history while calculating earnings!`)
+        } catch (err) {
+          console.log(`${Date().slice(16,24)}: Error getting lending history while calculating earnings!`)
+        }
+
       }
+    }).catch(err => console.error(err))
+  })
 
-    }
-  }).catch(err => console.error(err))
 }
 
 const getOpenLoanOffers = (currency) => {
-  loans.getOpenLoanOffers().then((openOffers) => {
+  return new Promise((resolve, reject) => {
+    loans.getOpenLoanOffers().then((openOffers) => {
       //console.log('open offers', openOffers)
       if (openOffers[currency]) {
-        console.log('Open loan offer: ', openOffers)
+        openOffers[currency].forEach((offer) => {
+        console.log(`${Date().slice(16,24)}: Open offer of ${offer.amount} ${currency} at rate of ${(offer.rate*100).toFixed(4)}% for ${offer.duration} days.`)
+        })
+        resolve(openOffers)
       } else {
+        resolve({
+          [currency]: openOffers
+        })
         console.log(`${Date().slice(16,24)}: No open offers.`)
       }
-    })
-    .catch(err => console.error(err))
+    }).catch(err => reject(err))
+  })
 }
 
 const makeLoanOffer = (currency, amount, duration, autoRenew, lendingRate) => {
   loans.createLoanOffer(currency, amount, duration, autoRenew, lendingRate)
-    .then(loanOffer => loanOffer)
+    .then((loanOffer) => {
+      loanOffer.success ? console.log(Date().slice(16, 24) + ':', loanOffer.message, 'With order ID:', loanOffer.orderID) : console.log(loanOffer.message)
+    })
     .catch(err => console.error(err))
 }
 
