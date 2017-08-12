@@ -1,4 +1,74 @@
-http://benpickles.github.io/peity/
-https://gionkunz.github.io/chartist-js/api-documentation.html
-https://cryptolend.net/help.html#rubwhite2
-http://rollity.com/
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/style.css">
+    <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+    <title>Plnxlndr</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        <a class="navbar-brand" href="#"><span class="logo">Plnxlndr</span></a>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="#">Settings</a>
+                <a class="nav-item nav-link" href="#">About</a>
+                <a class = "nav-item nav-link time"></a>
+            </div>
+        </div>
+    </nav>
+    <div class='container'>
+
+        <div class="chart">
+            <canvas id="movingAverages"></canvas>
+        </div>
+
+        <h3>Active Loans:</h3>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Rate</th>
+                    <th>APY</th>
+                    <th>Duration</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <hr>
+        <div class="lastRate">
+            <h2></h2>
+        </div>
+    </div>
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+    <!--Chart.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
