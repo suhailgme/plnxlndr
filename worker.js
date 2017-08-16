@@ -119,7 +119,7 @@ const getOpenLoanOffers = (currency) => {
       //console.log('open offers', openOffers)
       if (openOffers[currency]) {
         openOffers[currency].forEach((offer) => {
-        console.log(`${Date().slice(16,24)}: Open offer of ${offer.amount} ${currency} at rate of ${(offer.rate*100).toFixed(4)}% for ${offer.duration} days.`)
+        console.log(`${Date().slice(16,24)}: Open loan offer of ${offer.amount} ${currency} at rate of ${(offer.rate*100).toFixed(4)}% for ${offer.duration} days.`)
         })
         resolve(openOffers)
       } else {
@@ -142,7 +142,7 @@ const makeLoanOffer = (currency, amount, duration, autoRenew, lendingRate) => {
 
 const cancelLoanOffer = (orderNumber) => {
   loans.cancelLoanOffer(orderNumber)
-    .then(cancelledOrder => console.log(cancelledOrder))
+    .then(cancelledOrder => console.log(`${Date().slice(16, 24)}: ${cancelledOrder.message}`))
     .catch(err => console.error(err.message))
 }
 
