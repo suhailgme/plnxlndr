@@ -1,8 +1,9 @@
 const movingAverages = $("#movingAverages")
+let currency = 'BTC'
 
 
 //apy: ((%rate/100) + 1)^365-1) * 100 = %APY
-let maxRender = 50 //Render up to this many rates and indicators, set lower for better performance.
+let maxRender = 300 //Render up to this many rates and indicators, set lower for better performance.
 
 const getAPY = rate => ((Math.pow((Number(rate) + 1), 365) - 1) * 100).toLocaleString('en')
 
@@ -23,7 +24,7 @@ const backFill = (indicator, totalLength) => {
 
 const getData = () => {
 
-  $.getJSON('data.json', (json) => {
+  $.getJSON('data2.json', (json) => {
     $(".lastRate").find('h2').text('|Last Rate: ' + json.rate[json.rate.length - 1].rate + '%' +
       ' |Last Rate APY: ' + getAPY(json.rate[json.rate.length - 1].rate / 100) + '%' +
       ' |Last Rate APR: ' + (parseFloat(json.rate[json.rate.length - 1].rate) * 365).toFixed(3) + '%' +
@@ -43,6 +44,10 @@ const getData = () => {
     let maxEma50 = backFill(json.ema50, totalLength)
     let maxSma100 = backFill(json.sma100, totalLength)
     let maxWouldLend = backFill(json.wouldLend, totalLength)
+    //maxWouldLend.push(maxWouldLend[maxWouldLend.length-2]), 
+    maxWouldLend.push(maxWouldLend[maxWouldLend.length-1]), maxWouldLend=maxWouldLend.slice(-maxRender)
+
+    console.log(maxWouldLend)
     let lendingRate = []
     let axis = []
 
@@ -56,28 +61,39 @@ const getData = () => {
       }
     })
 
-    if (json.wouldLend.length < maxRender) {
-      maxWouldLend = Array(maxRender - json.wouldLend.length).fill(NaN)
-      json.wouldLend.forEach((offered) => {
-        maxWouldLend.push(offered)
-      })
-    } else {
-      maxWouldLend = json.wouldLend.slice(-maxRender)
-    }
 
 
 
     // Add active loans to the table
-    json.activeLoans.forEach((loan) => {
-      let days
-      Number(loan.duration) <= 1 ? days = ' Day' : days = ' Days'
-      $('tbody').append('<tr><td>' + parseFloat(loan.amount).toFixed(4) + ' ' + loan.currency + '</td>' +
-        '<td>' + (loan.rate * 100).toFixed(4) + '%' + '</td>' +
-        '<td>' + getAPY(loan.rate) + '%' + '</td>' +
-        '<td>' + loan.duration + days + '</td>' +
-        '<td>' + loan.date + '</td>' +
-        '</tr>')
-    })
+    if (json.activeLoans.length >= 1) {
+      json.activeLoans.forEach((loan) => {
+        let days
+        Number(loan.duration) <= 1 ? days = ' Day' : days = ' Days'
+        $('.activeLoans tbody').append('<tr><td>' + parseFloat(loan.amount).toFixed(4) + ' ' + loan.currency + '</td>' +
+          '<td>' + (loan.rate * 100).toFixed(4) + '%' + '</td>' +
+          '<td>' + getAPY(loan.rate) + '%' + '</td>' +
+          '<td>' + loan.duration + days + '</td>' +
+          '<td>' + moment.utc(loan.date).from(moment()) + '</td>' +
+          //'<td>' + moment.utc(loan.date).local().format('YYYY-M-DD hh:mm A') + '</td>' +
+          '</tr>')
+      })
+    } else{
+      $('.activeLoans').hide()
+    }
+
+    if (json.openOffers[currency].length >= 1) {
+      json.openOffers[currency].forEach((offer) => {
+        $('.openOffers tbody').append('<tr><td>' + parseFloat(offer.amount).toFixed(4) + ' ' + currency + '</td>' +
+          '<td>' + (offer.rate * 100).toFixed(4) + '%' + '</td>' +
+          '<td>' + getAPY(offer.rate) + '%' + '</td>' +
+          '<td>' + offer.duration + ' days' + '</td>' +
+          '<td>' + moment.utc(offer.date).from(moment()) + '</td>'
+        )
+      })
+    } else {
+      $('.openOffers').hide()
+    }
+
 
     // Bar chart, line chart and scatter chart shown with the last n lending rates, and simple/exponential averages,
     // in addition to Xs to indicate rates at which loans would be offered at if authorized.
@@ -134,7 +150,8 @@ const getData = () => {
             backgroundColor: 'black',
             borderColor: 'rgba(0, 0, 0 , 0)',
             pointBackgroundColor: 'black',
-            pointBorderColor: 'black'
+            pointBorderColor: 'black',
+            pointStyle: 'crossRot'
 
           },
           {
@@ -165,5 +182,6 @@ const getData = () => {
 
 $(document).ready(() => {
   getData()
-  $('.time').append(Date().slice(0, 21))
+  console.log(moment())
+  $('.time').append(moment().format('MMM-DD-Y hh:mm:ss A'))
 })
