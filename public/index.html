@@ -26,7 +26,7 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="#">Settings</a>
                 <a class="nav-item nav-link" href="#">About</a>
-                <a class = "nav-item nav-link time"></a>
+                <a class="nav-item nav-link justify-content-end time"></a>
             </div>
         </div>
     </nav>
@@ -35,27 +35,48 @@
         <div class="chart">
             <canvas id="movingAverages"></canvas>
         </div>
-
-        <h3>Active Loans:</h3>
-
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Rate</th>
-                    <th>APY</th>
-                    <th>Duration</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
         <hr>
         <div class="lastRate">
             <h2></h2>
         </div>
+        <div class="activeLoans">
+            <h3>Active Loans:</h3>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Rate</th>
+                        <th>APY</th>
+                        <th>Duration</th>
+                        <th>Date (local)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="openOffers">
+            <h3>Open Offers:</h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Rate</th>
+                        <th>APY</th>
+                        <th>Duration</th>
+                        <th>Date (local)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+
     </div>
 
 
@@ -68,6 +89,8 @@
     <!--Chart.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
     <script src="app.js"></script>
+    <!--Moment.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 
 </body>
 
