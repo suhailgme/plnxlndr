@@ -27,7 +27,7 @@ let minLoanRate = 0.0400 //Minimum rate to offer a loan for (0.04% is ~ 15.8% AP
 let offerAmount = 0.1 // Amount of currency to be lent per offer
 let offerDuration = 2 // Number of days to offer loans for
 let maxLoanOffers = 1 // Maximum number of open loan offers allowed
-let offerTimeOut = 300000 // Max time to leave offer open for (300s)
+let offerTimeOut = 600000 // Max time to leave offer open for (600s or 10 min)
 
 let file = path.join(__dirname, './public/data2.json')
 let loanMarketData = {
