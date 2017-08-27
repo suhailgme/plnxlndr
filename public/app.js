@@ -3,7 +3,7 @@ let currency = 'BTC'
 
 
 //apy: ((%rate/100) + 1)^365-1) * 100 = %APY
-let maxRender = 300 //Render up to this many rates and indicators, set lower for better performance.
+let maxRender = 100 //Render up to this many rates and indicators, set lower for better performance.
 
 const getAPY = rate => ((Math.pow((Number(rate) + 1), 365) - 1) * 100).toLocaleString('en')
 
