@@ -72,7 +72,7 @@ const getCompleteBalances = currency => {
 
               resolve(balances)
             } else {
-              reject('Unable to retrieve balances or not balances available.')
+              reject('Unable to retrieve balances or no balances available.')
             }
           })
       }).catch(err => console.error(`${Date().slice(16,24)}: ${err.message}`))
