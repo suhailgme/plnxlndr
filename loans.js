@@ -16,18 +16,20 @@ const getDepth = currency => {
 
 // Get lending history from beginning of the year to present (2017 - hard-coded for now)
 const getLendingHistory = () => {
-  return poloniex.returnLendingHistory(1483228800, 1514764799, null)
+  return poloniex.returnLendingHistory(1483228800, 1514764799)
     .then(history => history)
     .catch(err => err)
 }
 
-
+// Example call: getAllBalances(). Returns ALL balances for entire account for exchange, margin, and lending,
+// including balances currently on orders.
 const getAllBalances = () => {
   return poloniex.returnCompleteBalances('all')
     .then(balances => balances)
     .catch(err => err)
 }
 
+// Example call: getAvailableBalances(). Returns AVAILABLE (i.e. lendable) balances for entire account, including 
 const getAvailableBalances = () => {
   return poloniex.returnAvailableAccountBalances()
     .then(availableBalances => availableBalances)
@@ -35,7 +37,7 @@ const getAvailableBalances = () => {
 }
 
 
-
+// Example call: getActiveLoans() 
 const getActiveLoans = () => {
   return poloniex.returnActiveLoans()
     .then(activeLoans => activeLoans)
@@ -43,7 +45,7 @@ const getActiveLoans = () => {
 
 }
 
-
+// Example call: getOpenLoanOffers() 
 const getOpenLoanOffers = () => {
   return poloniex.returnOpenLoanOffers()
     .then(loanOffers => loanOffers)
@@ -60,11 +62,13 @@ const createLoanOffer = (currency, amount, duration, autoRenew, lendingRate) => 
 
 // Example call: cancelLoanOffer('10590')
 const cancelLoanOffer = (orderNumber) => {
-  return poloniex.createLoanOffer(orderNumber)
-  .then(offer => offer)
+  return poloniex.cancelLoanOffer(orderNumber)
+  .then(cancelledOrder => cancelledOrder)
   .catch(err => err)
 
 }
+
+
 
 
 module.exports = {
