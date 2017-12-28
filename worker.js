@@ -86,6 +86,7 @@ const getLendingEarnings = (currency) => {
   return new Promise((resolve, reject) => {
     let earnings = {}
     loans.getLendingHistory().then((history) => {
+      //console.log(history.length)
       if (history.length === 0) {
         console.log(`${Date().slice(16,24)}: No lending history available.`)
         reject(earnings)
@@ -105,6 +106,8 @@ const getLendingEarnings = (currency) => {
 
         } catch (err) {
           console.log(`${Date().slice(16,24)}: Error getting lending history while calculating earnings!`)
+        reject(earnings) //Added 28-dec-2017 to fix unhandled promise on failed api call.
+        
         }
 
       }
