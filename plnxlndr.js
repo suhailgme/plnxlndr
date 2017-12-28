@@ -26,7 +26,7 @@ let refreshRate = 60000 // 60s default
 let minLoanRate = 0.0400 //Minimum rate to offer a loan for (0.04% is ~ 15.8% APY, 14.6% APR)
 let offerAmount = 0.05 // Amount of currency to be lent per offer
 let offerDuration = 2 // Number of days to offer loans for
-let maxLoanOffers = 1 // Maximum number of open loan offers allowed
+let maxLoanOffers = 2 // Maximum number of open loan offers allowed
 let offerTimeOut = 1200000 // Max time to leave offer open for (1200s or 20 min)
 
 let file = path.join(__dirname, './public/data2.json')
@@ -128,6 +128,7 @@ const lendingStrategy = () => {
         console.log('Offer rate > open offer rate?', parseFloat(rates[rates.length - 1].rate) > parseFloat(loanMarketData.openOffers[currency].rate))
         // If the latest rate is greater than an existing offer, cancel it and offer a loan at the higher rate.
         if (parseFloat(rates[rates.length - 1].rate) > parseFloat(loanMarketData.openOffers[currency].rate)) {
+          console.log('Replacing loan offer for ',loanMarketData.openOffers[currency].rate, ' With ', rates[rates.length - 1].rate )
           worker.cancelLoanOffer(loanMarketData.openOffers[currency].id)
           worker.makeLoanOffer(currency, offerAmount, offerDuration, 0, parseFloat(rates[rates.length - 1].rate) / 100)
         } else {
