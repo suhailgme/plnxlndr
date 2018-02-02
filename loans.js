@@ -14,9 +14,12 @@ const getDepth = currency => {
 }
 
 
-// Get lending history from beginning of the year to present (2017 - hard-coded for now)
+// Get lending history for the last 30 days.
 const getLendingHistory = () => {
-  return poloniex.returnLendingHistory(1483228800, 1514764799)
+  let last30Days = Math.floor(new Date().setDate(new Date().getDate() - 30) / 1000)
+  let now = (Math.floor(new Date().getTime() / 1000))
+  let maxHistory = 10000
+  return poloniex.returnLendingHistory(last30Days, now, maxHistory)
     .then(history => history)
     .catch(err => err)
 }
@@ -30,6 +33,7 @@ const getAllBalances = () => {
 }
 
 // Example call: getAvailableBalances(). Returns AVAILABLE (i.e. lendable) balances for entire account, including 
+// including balances currently on orders.
 const getAvailableBalances = () => {
   return poloniex.returnAvailableAccountBalances()
     .then(availableBalances => availableBalances)
@@ -63,8 +67,8 @@ const createLoanOffer = (currency, amount, duration, autoRenew, lendingRate) => 
 // Example call: cancelLoanOffer('10590')
 const cancelLoanOffer = (orderNumber) => {
   return poloniex.cancelLoanOffer(orderNumber)
-  .then(cancelledOrder => cancelledOrder)
-  .catch(err => err)
+    .then(cancelledOrder => cancelledOrder)
+    .catch(err => err)
 
 }
 
