@@ -30,13 +30,14 @@ const getData = () => {
       ' |Last Rate APR: ' + (parseFloat(json.rate[json.rate.length - 1].rate) * 365).toFixed(3) + '%' +
       ' |At Market Depth: ' + json.rate[json.rate.length - 1].atDepth + ' BTC')
     $('<h2>|Lending Balance: ' + Number(json.balances.availableBalances.lending["BTC"]).toFixed(4) + ' BTC' +
-      ' |On Orders: ' + Number(json.balances.allBalances.onOrders).toFixed(4) + ' BTC' +
-      ' |Account Value: ' + Number(json.balances.allBalances.btcValue).toFixed(4) + ' BTC' + '</h2>' +
-      '<h2>|Gross Earnings: ' + json.earnings.gross.toFixed(4) + ' BTC' +
-      ' |Fees: ' + json.earnings.fees.toFixed(4) + ' BTC' +
-      ' |Net Earnings: ' + json.earnings.net.toFixed(4) + ' BTC' + '</h2>').appendTo('.lastRate')
+        ' |On Orders: ' + Number(json.balances.allBalances.onOrders).toFixed(4) + ' BTC' +
+        ' |Account Value: ' + Number(json.balances.allBalances.btcValue).toFixed(4) + ' BTC' + '</h2>' +
+        '<h2>|Gross Earnings: ' + json.earnings.gross.toFixed(4) + ' BTC' +
+        ' |Fees: ' + json.earnings.fees.toFixed(4) + ' BTC' +
+        ' |Net Earnings: ' + json.earnings.net.toFixed(4) + ' BTC' + ' (Last 30 days)' + '</h2>').appendTo('.lastRate') +
 
-    console.log(json)
+
+      console.log(json)
     let totalLength = json.rate.length
     let dataMean = []
     let maxOrders = json.rate.slice(-maxRender)
@@ -45,7 +46,7 @@ const getData = () => {
     let maxSma100 = backFill(json.sma100, totalLength)
     let maxWouldLend = backFill(json.wouldLend, totalLength)
     //maxWouldLend.push(maxWouldLend[maxWouldLend.length-2]), 
-    maxWouldLend.push(maxWouldLend[maxWouldLend.length-1]), maxWouldLend=maxWouldLend.slice(-maxRender)
+    maxWouldLend.push(maxWouldLend[maxWouldLend.length - 1]), maxWouldLend = maxWouldLend.slice(-maxRender)
 
     console.log(maxWouldLend)
     let lendingRate = []
@@ -77,7 +78,7 @@ const getData = () => {
           //'<td>' + moment.utc(loan.date).local().format('YYYY-M-DD hh:mm A') + '</td>' +
           '</tr>')
       })
-    } else{
+    } else {
       $('.activeLoans').hide()
     }
 
