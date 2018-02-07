@@ -32,9 +32,9 @@ const getData = () => {
     $('<h2>|Lending Balance: ' + Number(json.balances.availableBalances.lending["BTC"]).toFixed(4) + ' BTC' +
         ' |On Orders: ' + Number(json.balances.allBalances.onOrders).toFixed(4) + ' BTC' +
         ' |Account Value: ' + Number(json.balances.allBalances.btcValue).toFixed(4) + ' BTC' + '</h2>' +
-        '<h2>|Gross Earnings: ' + json.earnings.gross.toFixed(4) + ' BTC' +
-        ' |Fees: ' + json.earnings.fees.toFixed(4) + ' BTC' +
-        ' |Net Earnings: ' + json.earnings.net.toFixed(4) + ' BTC' + ' (Last 30 days)' + '</h2>').appendTo('.lastRate') +
+        '<h2>|Gross Earnings: ' + json.earnings.gross.toFixed(8) + ' BTC' +
+        ' |Fees: ' + json.earnings.fees.toFixed(8) + ' BTC' +
+        ' |Net Earnings: ' + json.earnings.net.toFixed(8) + ' BTC' + ' (Last 30 days)' + '</h2>').appendTo('.lastRate') +
 
 
       console.log(json)
