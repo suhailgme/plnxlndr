@@ -26,7 +26,7 @@ let refreshRate = 60000 // 60s default
 let minLoanRate = 0.0400 //Minimum rate to offer a loan for (0.04% is ~ 15.8% APY, 14.6% APR)
 let offerAmount = 0.05 // Amount of currency to be lent per offer
 let offerDuration = 2 // Number of days to offer loans for
-let maxLoanOffers = 2 // Maximum number of open loan offers allowed
+let maxLoanOffers = 3 // Maximum number of open loan offers allowed
 let offerTimeOut = 1200000 // Max time to leave offer open for (1200s or 20 min)
 
 let file = path.join(__dirname, './public/data2.json')
